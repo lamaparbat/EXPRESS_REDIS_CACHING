@@ -5,6 +5,8 @@ const getUsersService = async () => {
     try {
         const cacheValue = await redisClient.get("users");
 
+        console.log(cacheValue);
+
         if (cacheValue) return { data: JSON.parse(cacheValue), error: null };
 
         const { data } = await fetchUsers();

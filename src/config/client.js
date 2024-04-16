@@ -1,13 +1,7 @@
 const { Redis } = require("ioredis");
 
-
-console.log({ REDIS: process.env.KV_URL})
-
 const client = new Redis({
-    url: process.env.KV_URL,
-    socket: {
-        tls: true,
-    },
+    url: process.env.REDIS_URI
 });
 
 module.exports = client;
