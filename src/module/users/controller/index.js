@@ -1,16 +1,10 @@
-const { fetchUsers } = require("../../../lib/services/users");
-const redisClient = require("../../../config/client");
+const { getUsersService, getUserByIdService } = require("../services");
 
 const getUsers = async (_req, res) => {
     try {
-        const cacheValue = await redisClient.get("users");
+        const { data, error } = await getUsersService();
 
-        if (cacheValue) return res.send({ status: 200, data: JSON.parse(cacheValue) });
-
-        const { data } = await fetchUsers();
-
-        await redisClient.set("users", JSON.stringify(data));
-        await redisClient.expire("users", 30);
+        if (error) return res.status(400).json({ status: 400, data: null, message: error?.message });
 
         res.json({ status: 200, data: data });
     } catch (error) {
@@ -24,14 +18,9 @@ const getUserById = async (req, res) => {
         const { params } = req;
         const { id } = params ?? {};
 
-        const cacheValue = await redisClient.get(`users:${id}`);
+        const { data, error } = await getUserByIdService({ id });
 
-        if (cacheValue) return res.send({ status: 200, data: JSON.parse(cacheValue) });
-
-        const { data } = await fetchUsers(id);
-
-        await redisClient.set(`users:${id}`, JSON.stringify(data));
-        await redisClient.expire(`users:${id}`, 30);
+        if (error) return res.status(400).json({ status: 400, data: null, message: error?.message });
 
         res.send({ status: 200, data: data });
     } catch (error) {

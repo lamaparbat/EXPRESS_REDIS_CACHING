@@ -7,7 +7,6 @@ const fetchUsers = async (id) => {
         if (id) url = `${url}/${id}`;
 
         const result = await axios.get(url);
-
         return result;
     } catch (error) {
         return [];
