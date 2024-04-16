@@ -1,8 +1,7 @@
 const { Redis } = require("ioredis");
 
 const client = new Redis({
-    url: process.env.KV_URL,
-    password: process.env.KV_REST_API_TOKEN,
+    url: process.env.KV_URL
 });
 
 module.exports = client;
